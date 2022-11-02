@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Categoria {
+  id       Int        @id @default(autoincrement())
+  nombre   String
+  Producto Producto[]
+}
+
+model Contacto {
+  id        Int        @id @default(autoincrement())
+  telefono  String
+  email     String
+  Proveedor Proveedor?
+  Usuario   Usuario?
+  Vendedor  Vendedor?
+}
+
+model Producto {
+  id          Int       @id @default(autoincrement())
+  nombre      String
+  categoriaId Int
+  proveedorId Int
+  Categoria   Categoria @relation(fields: [categoriaId], references: [id])
+  Proveedor   Proveedor @relation(fields: [proveedorId], references: [id])
+  productoCantidad ProductoCantidad[]
+}
+
+model ProductoCantidad {
+  id          Int   @id @default(autoincrement())
+  cantidad    Int
+  productoId Int
+  producto    Producto @relation(fields: [productoId], references: [id])
+  ventaId     Int
+  venta       Venta @relation(fields: [ventaId], references: [id])
+}
+
+model Proveedor {
+  id         Int        @id @default(autoincrement())
+  nombre     String
+  contactoId Int        @unique
+  Contacto   Contacto   @relation(fields: [contactoId], references: [id])
+  Producto   Producto[]
+}
+
+model Usuario {
+  id         Int      @id @default(autoincrement())
+  nombre     String
+  passwd     String
+  contactoId Int      @unique
+  Contacto   Contacto @relation(fields: [contactoId], references: [id])
+  Venta      Venta[]
+}
+
+model Vendedor {
+  id         Int      @id @default(autoincrement())
+  nombre     String
+  contactoId Int      @unique
+  Contacto   Contacto @relation(fields: [contactoId], references: [id])
+  Venta      Venta[]
+}
+
+model Venta {
+  id               Int                @id @default(autoincrement())
+  compradorId      Int
+  vendedorId       Int
+  importe          Decimal
+  Usuario          Usuario            @relation(fields: [compradorId], references: [id])
+  Vendedor         Vendedor           @relation(fields: [vendedorId], references: [id])
+  productoCantidad ProductoCantidad[]
+}
