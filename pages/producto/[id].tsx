@@ -1,7 +1,7 @@
 import { Categoria, Producto } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { Container, Content, FlexboxGrid, Header, Table } from "rsuite";
-import Layout from "../../components/layout";
+import Layout, { ILayoutProps } from "../../components/Layout/Layout";
 import prisma from "../../lib/db/prisma";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -46,11 +46,11 @@ interface Props {
     cantVentas: Number,
 };
 
-const Product = (props: Props) => {
+const Product = (props: Props & ILayoutProps) => {
     const { Column, HeaderCell, Cell } = Table;
 
     return (
-        <Layout activeKey="" title='Productos'>
+        <Layout expandedMenu={props.expandedMenu} activeKey="producto" title='Productos'>
             <Container>
                 <Header>
                     <h3>Products by id </h3>

@@ -1,7 +1,7 @@
 import { Categoria } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import Layout, { LayoutProps } from "../../components/layout";
+import Layout, { ILayoutProps } from "../../components/Layout/Layout";
 import prisma from "../../lib/db/prisma";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -25,7 +25,7 @@ interface Props {
     categoria: Categoria
 };
 
-const CatByName = (props: Props & LayoutProps) => {
+const CatByName = (props: Props & ILayoutProps) => {
 
     return (
         <Layout expandedMenu={props.expandedMenu} activeKey="categoria" title={"Categoria" + props.categoria.id}>
